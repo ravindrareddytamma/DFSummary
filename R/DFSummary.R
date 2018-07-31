@@ -60,7 +60,7 @@ numeric_summary <- function(df)
 factor_summary <- function(df)
 {
   fact.char_ind <- which(sapply(df,class) %in% c("character","factor"))
-  fact_df <- df[,fact.char_ind]
+  fact_df <- subset(df,select = colnames(df)[fact.char_ind])
   uniq.levels <- sapply(fact_df,function(x){length(levels(as.factor(x)))})
   mode <- sapply(fact_df,function(x){levels(as.factor(x))[which(table(x) == max(table(x)))]})
   mode.freq <- sapply(fact_df,function(x){max(table(x))})
@@ -71,3 +71,4 @@ factor_summary <- function(df)
   res <- tibble::rownames_to_column(res,var = "STATISTIC")
   return(res)
 }
+
