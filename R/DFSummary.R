@@ -46,7 +46,7 @@ numeric_summary <- function(df)
     round(length(boxplot.stats(x)$out)/nrow(num_df),3)*100})
   res <- data.frame(min,max,per.25,per.50,per.75,mean,median,variance,sd,count.na,per.na,per.out)
   res <- as.data.frame(t(res),stringsAsFactors = F)
-  res <- rownames_to_column(res,var = "STATISTIC")
+  res <- tibble::rownames_to_column(res,var = "STATISTIC")
   return(res)
 }
 
@@ -68,6 +68,6 @@ factor_summary <- function(df)
     round(sum(cumsum(sort(table(x)/sum(table(x))*100,decreasing = T)) < 80)/length(levels(as.factor(x)))*100,3)})
   res <- data.frame(uniq.levels,mode,mode.freq,per.levels)
   res <- as.data.frame(t(res),stringsAsFactors = F)
-  res <- rownames_to_column(res,var = "STATISTIC")
+  res <- tibble::rownames_to_column(res,var = "STATISTIC")
   return(res)
 }
