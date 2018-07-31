@@ -29,7 +29,7 @@ split.vectors <- function(df)
 numeric_summary <- function(df)
 {
   num_ind <- which(sapply(df,class) %in% c("integer","numeric","double"))
-  num_df <- df %>% select(colnames(df)[num_ind])
+  num_df <- df[,num_ind]
   min <- sapply(num_df,min,na.rm = T)
   max <- sapply(num_df,max,na.rm = T)
   per.25 <- sapply(num_df,quantile,na.rm = T)[2,]
@@ -60,7 +60,7 @@ numeric_summary <- function(df)
 factor_summary <- function(df)
 {
   fact.char_ind <- which(sapply(df,class) %in% c("character","factor"))
-  fact_df <- df %>% select(colnames(df)[fact.char_ind])
+  fact_df <- df[,fact.char_ind]
   uniq.levels <- sapply(fact_df,function(x){length(levels(as.factor(x)))})
   mode <- sapply(fact_df,function(x){levels(as.factor(x))[which(table(x) == max(table(x)))]})
   mode.freq <- sapply(fact_df,function(x){max(table(x))})
