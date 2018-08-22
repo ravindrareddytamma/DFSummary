@@ -1,4 +1,4 @@
-library(dplyr)
+ns thlibrary(dplyr)
 library(data.table)
 library(stats)
 library(tibble)
@@ -21,7 +21,7 @@ split.vectors <- function(df)
 }
 
 #' @title func
-#' @description  cdcvdhc
+#' @description  Detects the Numerical Columns in the DataFrame and provides the Summary Statistics
 #' @param df
 #' @return res
 #' @export numeric_summary
@@ -52,7 +52,7 @@ numeric_summary <- function(df)
 
 
 #' @title func
-#' @description  cdcvdhc
+#' @description  Detects the Character and Factor Columns in the DataFrame and provides the Summary Statistics
 #' @param df
 #' @return res
 #' @export factor_summary
@@ -86,7 +86,7 @@ factor_summary <- function(df)
 }
 
 #' @title func
-#' @description  Sturge Formula to convert 
+#' @description  Sturge Formula to convert the Numerical column into appropriate Class Intervals. 
 #' @param df
 #' @return freq.table
 #' @export factor_summary
@@ -117,4 +117,42 @@ sturge <- function(vect,bins = 0)
   interval <- cut(vect,bins,dig.lab = 5)
   freq.table <- transform(table(interval))
   return(freq.table)
+}
+
+#' @title func
+#' @description  Detects the Numerical Columns and performs Pairwise t-test for all Numerical Columns in DataFrame  
+#' @param df
+#' @return res
+#' @export factor_summary
+
+
+DF.ttest <- function(data,num_cols = c())
+{
+  require(plyr,quietly = T)
+  data <- data.frame(data)
+  if(length(num_cols) > 0)
+  {
+    num_cols <- names(data)[num_cols]
+  }else{
+    num_cols <- split.vectors(data)$Numeric_Columns
+  }
+  
+  data <- data[,num_cols]
+  combos <- combn(ncol(data),2)
+  res <- data.frame()
+  for(i in 1:ncol(combos))
+  {
+    result <- t.test(data[,combos[1,i]],data[,combos[2,i]])
+    df <- data.frame("Column_1" = colnames(data)[combos[1,i]],
+               "Column_1.Mean" = result$estimate[1],
+               "Column_2" = colnames(data[combos[2,i]]),
+               "Column_2.Mean" = result$estimate[2],
+               "t_Value" = as.numeric(sprintf("%.3f", result$statistic)),
+               "Deg_of_Freedom"= result$parameter,
+               "p_value" = as.numeric(sprintf("%.3f", result$p.value)))
+    res <- rbind(res,df)
+  }
+  res <- res[order(res[,"p_value"],decreasing = T),]
+  row.names(res) <- 1:nrow(res)
+  return(res)
 }
