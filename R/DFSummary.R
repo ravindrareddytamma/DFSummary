@@ -1,4 +1,4 @@
-ns thlibrary(dplyr)
+library(dplyr)
 library(data.table)
 library(stats)
 library(tibble)
