@@ -1,3 +1,4 @@
 exportPattern(split.vectors)
 exportPattern(numeric_summary)
 exportPattern(factor_summary)
+exportPattern(DF.ttest)
