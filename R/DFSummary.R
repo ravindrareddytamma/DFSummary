@@ -92,31 +92,30 @@ factor_summary <- function(df)
 #' @export factor_summary
 
 
-sturge <- function(vect,bins = 0)
+sturge <- function (vect, bins = 0,cat.col = TRUE) 
 {
-  if(class(vect) == "character")
+  if (class(vect) == "character") 
     return(transform(table(vect)))
   n <- length(vect)
-  if(n == 1)return(table(vect))
-  low <- round(min(vect,na.rm = TRUE))
-  high <- round(max(vect,na.rm = TRUE))
+  if (n == 1) 
+    return(table(vect))
+  low <- round(min(vect, na.rm = TRUE))
+  high <- round(max(vect, na.rm = TRUE))
   k <- round(log2(n))
-  if(bins != 0){
-    width <- round((high - low)/(bins-1))
-  }else{
+  if (bins != 0) {
+    width <- round((high - low)/(bins - 1))
+  }else {
     width <- round((high - low)/k)
   }
-  if(width > 0)
-  {
-    bins <- seq(low,high+width,width)
-  }
-  else
-  {
+  if (width > 0) {
+    bins <- seq(low, high + width, width)
+  }else {
     stop("Width of Interval is not Correct or NA values in DataSet")
   }
-  interval <- cut(vect,bins,dig.lab = 5)
+  interval <- cut(vect, bins, dig.lab = 5)
   freq.table <- transform(table(interval))
-  return(freq.table)
+  ls = list("Freq.Table" = freq.table,"Vect" = interval)
+  return(ls)
 }
 
 #' @title func
