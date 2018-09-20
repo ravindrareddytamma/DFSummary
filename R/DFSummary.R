@@ -214,7 +214,7 @@ Character.Dist <- function(df)
 {
   `%>%` <- dplyr::`%>%`
   char_cols <- split.vectors(df)$Character_Columns
-  if(length(char_cols)== 0)stop("Error: No Numeric Columns present in Dataset!")
+  if(length(char_cols)== 0)stop("Error: No Character or Factor Columns present in Dataset!")
   char_df <- df[,char_cols] %>% as.data.frame()
   names(char_df) <- char_cols
   character_df <- char_df %>% tidyr::gather(key,value)
