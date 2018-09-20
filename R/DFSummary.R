@@ -199,8 +199,8 @@ Numeric.Dist <- function(df)
    ggplot2::geom_vline(data = mean.df,aes(xintercept = Mean),linetype = "dashed",color = "red",size = 0.8) + 
    ggplot2::geom_vline(data = median.df,aes(xintercept = Median),linetype = "dashed",color = "green1",size = 0.8) +
    ggplot2::geom_vline(data = mode.df,aes(xintercept = Mode),linetype = "dashed",color = "yellow2",size = 0.8) + 
-   ggplot2::facet_wrap(~key,scales = "free") + ggplot2::geom_text(data = mean.df,aes(x = Mean,label  = Label, y = -0.5),inherit.aes = F,color = "red")+
-   ggplot2::geom_text(data = median.df,aes(x = Median,label  = Label, y = -0.5),inherit.aes = F,color = "green1") + 
-   ggplot2::geom_text(data = mode.df,aes(x = Mode,label  = Label, y = -0.5),inherit.aes = F,color = "yellow2") + ggplot2::theme_bw()
+   ggplot2::facet_wrap(~key,scales = "free") + ggplot2::geom_text(data = mean.df,aes(x = Mean,label  = Label, y = 0.2),inherit.aes = F,color = "red")+
+   ggplot2::geom_text(data = median.df,aes(x = Median,label  = Label, y = 0.4),inherit.aes = F,color = "green1") + 
+   ggplot2::geom_text(data = mode.df,aes(x = Mode,label  = Label, y = 0.6),inherit.aes = F,color = "yellow2") + ggplot2::theme_bw()
 }
 
