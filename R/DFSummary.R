@@ -164,6 +164,7 @@ DF.ttest <- function(data,num_cols = c())
 
 mode <- function(vect)
 {
+  `%>%` <- dplyr::`%>%`
   vect <- vect[!is.na(vect)]
   ind <- which(table(vect) == max(table(vect)))
   ind <- names(ind) %>% as.numeric()
