@@ -218,7 +218,7 @@ Character.Dist <- function(df)
   char_df <- df[,char_cols] %>% as.data.frame()
   names(char_df) <- char_cols
   character_df <- char_df %>% tidyr::gather(key,value)
-  character_df <- character_df %>% group_by(key,value) %>% summarise("Count" = n())  
+  character_df <- character_df %>% dplyr::group_by(key,value) %>% dplyr::summarise("Count" = n())  
   ggplot2::ggplot(character_df,aes(x = reorder(value,Count), y = Count,fill = value)) + ggplot2::geom_bar(stat = "identity") + ggplot2::facet_wrap(~key,scales = "free")+ ggplot2::coord_flip() + ggplot2::guides(fill = F)
   
 }
