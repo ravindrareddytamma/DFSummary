@@ -2,8 +2,8 @@ library(dplyr)
 library(data.table)
 library(stats)
 library(tibble)
-#setwd("E:/Exploratory Data Analysis/Assignments - 3B/Assignment-1/parliament")
-#par <- fread("parliament.csv")
+library(tidyr)
+library(ggplot2)
 
 #' @title func
 #' @description  Returns list of Numeric and Character Columns
@@ -176,3 +176,31 @@ mode <- function(vect)
     return(ind)
   }
 }
+
+#' @title func
+#' @description  Gives the Distribution Plots for all Numeric Columns in the DataFrame
+#' @param df
+#' @return plot
+#' @export Numeric.Dist
+
+Numeric.Dist <- function(df)
+{
+  `%>%` <- dplyr::`%>%`
+  num_cols <- split.vectors(df)$Numeric_Columns
+  if(length(num_cols)== 0)stop("Error: No Numeric Columns present in Dataset!")
+  num_df <- df[,num_cols] %>% as.data.frame()
+  names(num_df) <- num_cols
+  numeric_df <- num_df %>% tidyr::gather(key,value) 
+  mean.df <- data.frame("key" = unique(numeric_df$key),"Mean" = sapply(num_df,mean,na.rm = T),"Label" = rep("Mean",ncol(num_df)))
+  median.df <- data.frame("key" = unique(numeric_df$key),"Median" = sapply(num_df,median,na.rm = T),"Label" = rep("Median",ncol(num_df)))
+  mode.df <- data.frame("key" = unique(numeric_df$key),"Mode" = sapply(num_df,mode),"Label" = rep("Mode",ncol(num_df)))
+  
+ numeric_df %>% ggplot2::ggplot(aes(value)) + ggplot2::geom_density(aes(y = ..count..),fill = "steelblue4",size = 1) + 
+   ggplot2::geom_vline(data = mean.df,aes(xintercept = Mean),linetype = "dashed",color = "red",size = 0.8) + 
+   ggplot2::geom_vline(data = median.df,aes(xintercept = Median),linetype = "dashed",color = "green1",size = 0.8) +
+   ggplot2::geom_vline(data = mode.df,aes(xintercept = Mode),linetype = "dashed",color = "yellow2",size = 0.8) + 
+   ggplot2::facet_wrap(~key,scales = "free") + ggplot2::geom_text(data = mean.df,aes(x = Mean,label  = Label, y = 1),inherit.aes = F,color = "red")+
+   ggplot2::geom_text(data = median.df,aes(x = Median,label  = Label, y = 2),inherit.aes = F,color = "green1") + 
+   ggplot2::geom_text(data = mode.df,aes(x = Mode,label  = Label, y = 3),inherit.aes = F,color = "yellow2") + ggplot2::theme_bw()
+}
+
