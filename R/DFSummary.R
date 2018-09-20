@@ -204,3 +204,22 @@ Numeric.Dist <- function(df)
    ggplot2::geom_text(data = mode.df,aes(x = Mode,label  = Label, y = 0.6),inherit.aes = F,color = "yellow2") + ggplot2::theme_bw()
 }
 
+#' @title func
+#' @description  Gives the Distribution Plots for all Character Columns in the DataFrame
+#' @param df
+#' @return plot
+#' @export Character.Dist
+
+Character.Dist <- function(df)
+{
+  `%>%` <- dplyr::`%>%`
+  char_cols <- split.vectors(df)$Character_Columns
+  if(length(char_cols)== 0)stop("Error: No Numeric Columns present in Dataset!")
+  char_df <- df[,char_cols] %>% as.data.frame()
+  names(char_df) <- char_cols
+  character_df <- char_df %>% gather(key,value)
+  character_df <- character_df %>% group_by(key,value) %>% summarise("Count" = n())  
+  ggplot2::ggplot(character_df,aes(x = reorder(value,Count), y = Count,fill = value)) + ggplot2::geom_bar(stat = "identity") + ggplot2::facet_wrap(~key,scales = "free")+ ggplot2::coord_flip() + ggplot2::guides(fill = F)
+  
+}
+
