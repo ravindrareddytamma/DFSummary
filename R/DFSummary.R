@@ -155,3 +155,23 @@ DF.ttest <- function(data,num_cols = c())
   row.names(res) <- 1:nrow(res)
   return(res)
 }
+
+#' @title func
+#' @description  Returns the most repeating value in the Vector
+#' @param vect
+#' @return ind
+#' @export mode
+
+mode <- function(vect)
+{
+  vect <- vect[!is.na(vect)]
+  ind <- which(table(vect) == max(table(vect)))
+  ind <- names(ind) %>% as.numeric()
+  if(length(ind) > 1){
+    if(sum(mean(vect) == ind) > 0)return(mean(vect))
+    return(sort(ind)[round(length(ind)/2)])
+  }else
+  {
+    return(ind)
+  }
+}
