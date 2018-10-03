@@ -265,7 +265,7 @@ DF.aov_ttest <- function(df)
   }
   
   res <- data.frame("Character_Column" = char_cols, "Numeric_Column" = num_cols, "P_Value" = p.value)
-  res <- res %>% arrange(-P_Value)
+  res <- res %>% dplyr::arrange(-P_Value)
   return(res)
 }
 
