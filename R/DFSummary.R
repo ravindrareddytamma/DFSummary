@@ -195,13 +195,13 @@ Numeric.Dist <- function(df)
   median.df <- data.frame("key" = unique(numeric_df$key),"Median" = sapply(num_df,median,na.rm = T),"Label" = rep("Med",ncol(num_df)))
   mode.df <- data.frame("key" = unique(numeric_df$key),"Mode" = sapply(num_df,mode),"Label" = rep("Mod",ncol(num_df)))
   
- numeric_df %>% ggplot2::ggplot(aes(value)) + ggplot2::geom_density(aes(y = ..count..),fill = "steelblue4",size = 1) + 
-   ggplot2::geom_vline(data = mean.df,aes(xintercept = Mean),linetype = "dashed",color = "red",size = 0.8) + 
-   ggplot2::geom_vline(data = median.df,aes(xintercept = Median),linetype = "dashed",color = "green1",size = 0.8) +
-   ggplot2::geom_vline(data = mode.df,aes(xintercept = Mode),linetype = "dashed",color = "yellow2",size = 0.8) + 
+ numeric_df %>% ggplot2::ggplot(ggplot2::aes(value)) + ggplot2::geom_density(ggplot2::aes(y = ..count..),fill = "steelblue4",size = 1) + 
+   ggplot2::geom_vline(data = mean.df,ggplot2::aes(xintercept = Mean),linetype = "dashed",color = "red",size = 0.8) + 
+   ggplot2::geom_vline(data = median.df,ggplot2::aes(xintercept = Median),linetype = "dashed",color = "green1",size = 0.8) +
+   ggplot2::geom_vline(data = mode.df,ggplot2::aes(xintercept = Mode),linetype = "dashed",color = "yellow2",size = 0.8) + 
    ggplot2::facet_wrap(~key,scales = "free") + ggplot2::geom_text(data = mean.df,aes(x = Mean,label  = Label, y = 0.2),inherit.aes = F,color = "red")+
-   ggplot2::geom_text(data = median.df,aes(x = Median,label  = Label, y = 0.4),inherit.aes = F,color = "green1") + 
-   ggplot2::geom_text(data = mode.df,aes(x = Mode,label  = Label, y = 0.6),inherit.aes = F,color = "yellow2") + ggplot2::theme_bw()
+   ggplot2::geom_text(data = median.df,ggplot2::aes(x = Median,label  = Label, y = 0.4),inherit.aes = F,color = "green1") + 
+   ggplot2::geom_text(data = mode.df,ggplot2::aes(x = Mode,label  = Label, y = 0.6),inherit.aes = F,color = "yellow2") + ggplot2::theme_bw()
 }
 
 #' @title func
@@ -219,7 +219,7 @@ Character.Dist <- function(df)
   names(char_df) <- char_cols
   character_df <- char_df %>% tidyr::gather(key,value)
   character_df <- character_df %>% dplyr::group_by(key,value) %>% dplyr::summarise("Count" = n())  
-  ggplot2::ggplot(character_df,aes(x = reorder(value,Count), y = Count,fill = value)) + ggplot2::geom_bar(stat = "identity") + ggplot2::facet_wrap(~key,scales = "free")+ ggplot2::coord_flip() + ggplot2::guides(fill = F)
+  ggplot2::ggplot(character_df,ggplot2::aes(x = stats::reorder(value,Count), y = Count,fill = value)) + ggplot2::geom_bar(stat = "identity") + ggplot2::facet_wrap(~key,scales = "free")+ ggplot2::coord_flip() + ggplot2::guides(fill = F)
   
 }
 
