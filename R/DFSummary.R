@@ -223,3 +223,50 @@ Character.Dist <- function(df)
   
 }
 
+#' @title func
+#' @description  Gives the pariwise annova test results for all numerical and categorical columns in the Dataset
+#' @param df
+#' @return res
+#' @export DF.aov_ttest
+
+DF.aov_ttest <- function(df)
+{
+  `%>%` <- dplyr::`%>%`
+  df <- as.data.frame(df)
+  n <- split.vectors(df)$Numeric_Columns
+  if(length(n) == 0)stop("No Numeric Columns present in the Dataset")
+  c <- split.vectors(df)$Character_Columns
+  if(length(c) == 0)stop("No Character Columns present in the Dataset")
+  num_df <- df[,n] %>% as.data.frame()
+  names(num_df) <- n
+  char_df <- df[,c] %>% as.data.frame()
+  names(char_df) <- c
+  char_cols <- c()
+  num_cols <- c()
+  p.value <- c()
+  for(i in 1:ncol(char_df))
+  {
+    for(j in 1:ncol(num_df))
+    {
+      if(length(levels(as.factor(char_df[,i]))) <= 2)
+      {
+        char_cols <- c(char_cols,names(char_df)[i])
+        num_cols <- c(num_cols,names(num_df)[j])
+        p <- round(t.test(num_df[char_df[,i] == levels(as.factor(char_df[,i]))[1],j],num_df[char_df[,i] == levels(as.factor(char_df[,i]))[2],j])$p.value,4)
+        p.value <- c(p.value,p)
+      }else{
+        char_cols <- c(char_cols,names(char_df)[i])
+        num_cols <- c(num_cols,names(num_df)[j])
+        r <- summary(aov(num_df[,j] ~ char_df[,i]))
+        p <- ifelse(length(r[[1]]) < 5,0,round(r[[1]][5]$`Pr(>F)`[1],4))
+        p.value <- c(p.value,p)
+      }
+    }
+  }
+  
+  res <- data.frame("Character_Column" = char_cols, "Numeric_Column" = num_cols, "P_Value" = p.value)
+  res <- res %>% arrange(-P_Value)
+  return(res)
+}
+
+
