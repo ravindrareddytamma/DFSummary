@@ -269,4 +269,44 @@ DF.aov_ttest <- function(df)
   return(res)
 }
 
+#' @title func
+#' @description  Gives the correlation between numerical variables in the Data Set
+#' @param df
+#' @return res
+#' @export DF.corr_plot
 
+DF.corr_plot <- function(df)
+{
+  `%>%` <- dplyr::`%>%`
+  df <- na.omit(df)
+  num_df <- df %>% dplyr::select(split.vectors(df)$Numeric_Columns) %>% as.data.frame()
+  if(ncol(num_df) <= 1)
+    stop("In Sufficient Numeric Columns in Data Frame")
+  cor.mtest <- function(mat) {
+    mat <- as.matrix(mat)
+    n <- ncol(mat)
+    p.mat<- matrix(NA, n, n)
+    diag(p.mat) <- 0
+    for (i in 1:(n - 1)) {
+      for (j in (i + 1):n) {
+        tmp <- cor.test(mat[, i], mat[, j])
+        p.mat[i, j] <- p.mat[j, i] <- tmp$p.value
+      }
+    }
+    colnames(p.mat) <- rownames(p.mat) <- colnames(mat)
+    p.mat
+  }
+  
+  p.mat <- cor.mtest(num_df)
+  corr_data <- stats::cor(num_df)
+  col <- grDevices::colorRampPalette(c("#BB4444", "#EE9988", "#FFFFFF", "#77AADD", "#4477AA"))
+  res <- corrplot::corrplot(corr_data, method="color", col=col(200),  
+           type="upper", order="hclust", 
+           addCoef.col = "black", # Add coefficient of correlation
+           # Combine with significance
+           p.mat = p.mat, insig = "blank", 
+           # hide correlation coefficient on the principal diagonal
+           diag=FALSE
+  return(res)
+  )
+}
