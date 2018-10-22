@@ -302,13 +302,13 @@ DF.corr_plot <- function(df)
   p.mat <- cor.mtest(num_df)
   corr_data <- stats::cor(num_df)
   col <- grDevices::colorRampPalette(c("#BB4444", "#EE9988", "#FFFFFF", "#77AADD", "#4477AA"))
-  res <- corrplot::corrplot(corr_data, method="color", col=col(200),  
+  corrplot::corrplot(corr_data, method="color", col=col(200),  
            type="upper", order="hclust", 
            addCoef.col = "black", # Add coefficient of correlation
            # Combine with significance
            p.mat = p.mat, insig = "blank", 
            # hide correlation coefficient on the principal diagonal
            diag=FALSE
-  return(res)
+  
   )
 }
