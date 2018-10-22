@@ -4,6 +4,8 @@ library(stats)
 library(tibble)
 library(tidyr)
 library(ggplot2)
+library(corrplot)
+library(grDevices)
 
 #' @title func
 #' @description  Returns list of Numeric and Character Columns
